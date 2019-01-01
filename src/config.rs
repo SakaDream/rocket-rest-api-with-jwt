@@ -1,11 +1,8 @@
 use api::account_controller::*;
 use api::address_book_controller::*;
 use diesel::pg::PgConnection;
-use diesel::prelude::*;
 use rocket::fairing::AdHoc;
-use rocket::Config;
 use rocket::Rocket;
-use std::env;
 
 embed_migrations!();
 

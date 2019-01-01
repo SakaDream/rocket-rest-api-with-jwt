@@ -1,8 +1,8 @@
 use config::DbConn;
 use constants::message_constants;
 use jsonwebtoken::TokenData;
-use jsonwebtoken::{Algorithm, Header, Validation};
-use models::response::{Response, ResponseWithStatus};
+use jsonwebtoken::{Header, Validation};
+use models::response::Response;
 use models::user::User;
 use rocket::http::Status;
 use rocket::outcome::Outcome;

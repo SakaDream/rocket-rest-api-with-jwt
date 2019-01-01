@@ -48,8 +48,8 @@ impl Person {
             id_and_age_query = query.as_str().parse::<i32>().unwrap();
         }
 
-        let mut gender_query = false;
-        let mut gender_query_flag = false;
+        let gender_query;
+        let gender_query_flag;
         match query.to_lowercase().as_str() {
             "male" => {
                 gender_query = true;

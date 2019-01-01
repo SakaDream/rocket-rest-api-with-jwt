@@ -1,11 +1,9 @@
 use config::DbConn;
-use jwt;
 use jwt::UserToken;
 use models::person::PersonDTO;
 use models::response::Response;
 use rocket::http::RawStr;
 use rocket::http::Status;
-use rocket::request::Request;
 use rocket::response::status;
 use rocket_contrib::json::Json;
 use services::address_book_service;
