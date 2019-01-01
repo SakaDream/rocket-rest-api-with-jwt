@@ -1,0 +1,2 @@
+[global.databases]
+postgres_database = { url = "postgres://username:password@server/db_name" }
