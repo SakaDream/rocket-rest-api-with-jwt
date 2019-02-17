@@ -1,5 +1,6 @@
 use config::DbConn;
 use constants::message_constants;
+use jsonwebtoken::errors::Result;
 use jsonwebtoken::TokenData;
 use jsonwebtoken::{Header, Validation};
 use models::response::Response;
@@ -32,10 +33,11 @@ impl<'a, 'r> FromRequest<'a, 'r> for UserToken {
             let authen_str = authen_header.to_string();
             if authen_str.starts_with("bearer") {
                 let token = authen_str[6..authen_str.len()].trim();
-                let token_data = decode_token(token.to_string());
-                if verify_token(&token_data, &conn) {
-                    return Outcome::Success(token_data.claims);
-                }
+                if let Ok(token_data) = decode_token(token.to_string()) {
+                    if verify_token(&token_data, &conn) {
+                        return Outcome::Success(token_data.claims);
+                    }
+                } 
             }
         }
 
@@ -63,8 +65,8 @@ pub fn generate_token(user: String) -> String {
     jsonwebtoken::encode(&Header::default(), &payload, KEY).unwrap()
 }
 
-fn decode_token(token: String) -> TokenData<UserToken> {
-    jsonwebtoken::decode::<UserToken>(&token, KEY, &Validation::default()).unwrap()
+fn decode_token(token: String) -> Result<TokenData<UserToken>> {
+    jsonwebtoken::decode::<UserToken>(&token, KEY, &Validation::default())
 }
 
 fn verify_token(token_data: &TokenData<UserToken>, conn: &DbConn) -> bool {
