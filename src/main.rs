@@ -19,6 +19,8 @@ extern crate jsonwebtoken;
 extern crate serde;
 extern crate serde_json;
 extern crate time;
+extern crate chrono;
+extern crate uuid;
 
 mod api;
 mod config;

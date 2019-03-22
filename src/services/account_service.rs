@@ -26,13 +26,12 @@ pub fn signup(user: UserDTO, conn: DbConn) -> ResponseWithStatus {
 }
 
 pub fn login(login: LoginDTO, conn: DbConn) -> ResponseWithStatus {
-    let username = User::login(login, &conn);
-    if !username.is_empty() {
+    if let Some(result) = User::login(login, &conn) {
         ResponseWithStatus {
             status_code: Status::Ok.code,
             response: Response {
                 message: String::from(message_constants::MESSAGE_LOGIN_SUCCESS),
-                data: serde_json::to_value(json!({ "token": jwt::generate_token(username) }))
+                data: serde_json::to_value(json!({ "token": jwt::generate_token(result), "type": "bearer" }))
                     .unwrap(),
             },
         }

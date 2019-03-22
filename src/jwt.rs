@@ -4,7 +4,7 @@ use jsonwebtoken::errors::Result;
 use jsonwebtoken::TokenData;
 use jsonwebtoken::{Header, Validation};
 use models::response::Response;
-use models::user::User;
+use models::user::{ User, LoginInfoDTO };
 use rocket::http::Status;
 use rocket::outcome::Outcome;
 use rocket::request::{self, FromRequest, Request};
@@ -17,10 +17,12 @@ static ONE_WEEK: i64 = 60 * 60 * 24 * 7;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserToken {
     // issued at
-    iat: i64,
+    pub iat: i64,
     // expiration
-    exp: i64,
-    user: String,
+    pub exp: i64,
+    // data
+    pub user: String,
+    pub login_session: String,
 }
 
 impl<'a, 'r> FromRequest<'a, 'r> for UserToken {
@@ -54,12 +56,13 @@ impl<'a, 'r> FromRequest<'a, 'r> for UserToken {
     }
 }
 
-pub fn generate_token(user: String) -> String {
+pub fn generate_token(login: LoginInfoDTO) -> String {
     let now = time::get_time().sec;
     let payload = UserToken {
         iat: now,
         exp: now + ONE_WEEK,
-        user: user,
+        user: login.username,
+        login_session: login.login_session,
     };
 
     jsonwebtoken::encode(&Header::default(), &payload, KEY).unwrap()
@@ -70,5 +73,5 @@ fn decode_token(token: String) -> Result<TokenData<UserToken>> {
 }
 
 fn verify_token(token_data: &TokenData<UserToken>, conn: &DbConn) -> bool {
-    User::is_user_exists(token_data.claims.user.to_string(), conn)
+    User::is_valid_login_session(&token_data.claims, conn)
 }

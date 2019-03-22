@@ -3,27 +3,38 @@ use diesel::prelude::*;
 use diesel::PgConnection;
 use schema::users;
 use schema::users::dsl::*;
+use uuid::Uuid;
+use models::login_history::LoginHistory;
+use jwt::UserToken;
 
-#[derive(Queryable, Serialize, Deserialize)]
+#[derive(Identifiable, Queryable, Serialize, Deserialize)]
 pub struct User {
-    id: i32,
-    username: String,
-    email: String,
-    password: String,
+    pub id: i32,
+    pub username: String,
+    pub email: String,
+    pub password: String,
+    pub login_session: String,
 }
 
 #[derive(Insertable, Serialize, Deserialize)]
 #[table_name = "users"]
 pub struct UserDTO {
-    username: String,
-    email: String,
-    password: String,
+    pub username: String,
+    pub email: String,
+    pub password: String,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct LoginDTO {
-    username_or_email: String,
-    password: String,
+    pub username_or_email: String,
+    pub password: String,
+}
+
+#[derive(Insertable)]
+#[table_name = "users"]
+pub struct LoginInfoDTO {
+    pub username: String,
+    pub login_session: String,
 }
 
 impl User {
@@ -39,7 +50,7 @@ impl User {
             .is_ok()
     }
 
-    pub fn login(login: LoginDTO, conn: &PgConnection) -> String {
+    pub fn login(login: LoginDTO, conn: &PgConnection) -> Option<LoginInfoDTO> {
         let user_to_verify = users
             .filter(username.eq(&login.username_or_email))
             .or_filter(email.eq(&login.username_or_email))
@@ -48,18 +59,55 @@ impl User {
         if !user_to_verify.password.is_empty()
             && verify(&login.password, &user_to_verify.password).unwrap()
         {
-            user_to_verify.username
+            if let Some(login_history) = LoginHistory::new(&user_to_verify.username, conn) {
+                LoginHistory::save_login_history(login_history, conn);
+                let login_session_str = User::generate_login_session();
+                User::update_login_session_to_db(&user_to_verify.username, &login_session_str, conn);
+                Some(LoginInfoDTO {
+                    username: user_to_verify.username,
+                    login_session: login_session_str,
+                })
+            } else {
+                None
+            }
         } else {
-            String::new()
+            None
         }
     }
 
-    pub fn is_user_exists(un: String, conn: &PgConnection) -> bool {
-        let user = users.filter(username.eq(&un)).get_result::<User>(conn);
+    pub fn is_valid_login_session(user_token: &UserToken, conn: &PgConnection) -> bool {
+        let user = users
+            .filter(username.eq(&user_token.user))
+            .filter(login_session.eq(&user_token.login_session))
+            .get_result::<User>(conn);
         if user.is_err() {
             false
         } else {
             true
+        }
+    }
+
+    pub fn find_user_by_username(un: &str, conn: &PgConnection) -> Option<User> {
+        let user = users.filter(username.eq(un)).get_result::<User>(conn);
+        if user.is_err() {
+            None
+        } else {
+            Some(user.unwrap())
+        }
+    }
+
+    pub fn generate_login_session() -> String {
+        Uuid::new_v4().to_simple().to_string()
+    }
+
+    pub fn update_login_session_to_db(un: &str, login_session_str: &str, conn: &PgConnection) -> bool {
+        if let Some(user) = User::find_user_by_username(un, conn) {
+            diesel::update(users.find(user.id))
+            .set(login_session.eq(login_session_str.to_string()))
+            .execute(conn)
+            .is_ok()
+        } else {
+            false
         }
     }
 }
