@@ -60,7 +60,9 @@ impl User {
             && verify(&login.password, &user_to_verify.password).unwrap()
         {
             if let Some(login_history) = LoginHistory::new(&user_to_verify.username, conn) {
-                LoginHistory::save_login_history(login_history, conn);
+                if !LoginHistory::save_login_history(login_history, conn) {
+                    return None;
+                }
                 let login_session_str = User::generate_login_session();
                 User::update_login_session_to_db(&user_to_verify.username, &login_session_str, conn);
                 Some(LoginInfoDTO {
@@ -76,15 +78,11 @@ impl User {
     }
 
     pub fn is_valid_login_session(user_token: &UserToken, conn: &PgConnection) -> bool {
-        let user = users
+        users
             .filter(username.eq(&user_token.user))
             .filter(login_session.eq(&user_token.login_session))
-            .get_result::<User>(conn);
-        if user.is_err() {
-            false
-        } else {
-            true
-        }
+            .get_result::<User>(conn)
+            .is_ok()
     }
 
     pub fn find_user_by_username(un: &str, conn: &PgConnection) -> Option<User> {

@@ -33,10 +33,10 @@ impl LoginHistory {
         }
     }
 
-    pub fn save_login_history(insert_record: LoginHistoryInsertableDTO, conn: &PgConnection) {
+    pub fn save_login_history(insert_record: LoginHistoryInsertableDTO, conn: &PgConnection) -> bool {
         diesel::insert_into(login_history)
-        .values(&insert_record)
-        .execute(conn)
-        .is_ok();
+            .values(&insert_record)
+            .execute(conn)
+            .is_ok()
     }
 }
