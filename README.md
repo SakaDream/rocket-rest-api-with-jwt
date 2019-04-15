@@ -4,7 +4,7 @@ A Rusty Rocket 🚀 fuelled with Diesel 🛢 and secured by JWT 🔐
 
 ## Require
 
-- [Rust](rust-lang.org)
+- [Rust](https://rustup.rs/)
 - [Postgres](https://www.postgresql.org/)
 
 ## How to run
