@@ -43,7 +43,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for UserToken {
             }
         }
 
-        return Outcome::Failure((
+        Outcome::Failure((
             Status::BadRequest,
             status::Custom(
                 Status::BadRequest,
@@ -52,7 +52,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for UserToken {
                     data: serde_json::to_value("").unwrap(),
                 }),
             ),
-        ));
+        ))
     }
 }
 

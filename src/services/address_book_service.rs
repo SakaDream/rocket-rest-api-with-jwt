@@ -67,7 +67,7 @@ pub fn insert(new_person: PersonDTO, conn: DbConn) -> ResponseWithStatus {
 
 pub fn update(id: i32, updated_person: PersonDTO, conn: DbConn) -> ResponseWithStatus {
     let option_person = Person::find_by_id(id, &conn);
-    if let Some(_) = option_person {
+    if option_person.is_some() {
         if Person::update(id, updated_person, &conn) {
             ResponseWithStatus {
                 status_code: Status::Ok.code,
@@ -98,7 +98,7 @@ pub fn update(id: i32, updated_person: PersonDTO, conn: DbConn) -> ResponseWithS
 
 pub fn delete(id: i32, conn: DbConn) -> ResponseWithStatus {
     let option_person = Person::find_by_id(id, &conn);
-    if let Some(_) = option_person {
+    if option_person.is_some() {
         if Person::delete(id, &conn) {
             ResponseWithStatus {
                 status_code: Status::Ok.code,

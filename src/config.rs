@@ -27,9 +27,10 @@ pub fn rocket() -> (Rocket, Option<DbConn>) {
             routes![find_all, find_by_id, query, insert, update, delete],
         );
 
-    let conn = match cfg!(test) {
-        true => DbConn::get_one(&rocket),
-        false => None,
+    let conn = if cfg!(test) {
+        DbConn::get_one(&rocket)
+    } else {
+        None
     };
 
     (rocket, conn)

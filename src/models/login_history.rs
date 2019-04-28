@@ -22,7 +22,7 @@ pub struct LoginHistoryInsertableDTO {
 }
 
 impl LoginHistory {
-    pub fn new(un: &str, conn: &PgConnection) -> Option<LoginHistoryInsertableDTO> {
+    pub fn create(un: &str, conn: &PgConnection) -> Option<LoginHistoryInsertableDTO> {
         if let Some(user) = User::find_user_by_username(un, conn) {
             Some(LoginHistoryInsertableDTO {
                 user_id: user.id,

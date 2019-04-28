@@ -59,7 +59,7 @@ impl User {
         if !user_to_verify.password.is_empty()
             && verify(&login.password, &user_to_verify.password).unwrap()
         {
-            if let Some(login_history) = LoginHistory::new(&user_to_verify.username, conn) {
+            if let Some(login_history) = LoginHistory::create(&user_to_verify.username, conn) {
                 if !LoginHistory::save_login_history(login_history, conn) {
                     return None;
                 }

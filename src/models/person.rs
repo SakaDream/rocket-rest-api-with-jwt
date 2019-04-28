@@ -43,7 +43,7 @@ impl Person {
         let pattern = format!("%{}%", query);
         let mut id_and_age_query: i32 = 0;
         let mut id_and_age_query_flag = false;
-        if let Ok(_) = query.as_str().parse::<i32>() {
+        if query.as_str().parse::<i32>().is_ok() {
             id_and_age_query_flag = true;
             id_and_age_query = query.as_str().parse::<i32>().unwrap();
         }
@@ -65,8 +65,8 @@ impl Person {
             }
         }
 
-        if id_and_age_query_flag == true && gender_query_flag == true {
-            return people
+        if id_and_age_query_flag && gender_query_flag {
+            people
                 .order(id.asc())
                 .filter(id.eq(&id_and_age_query))
                 .or_filter(name.like(&pattern))
@@ -74,31 +74,31 @@ impl Person {
                 .or_filter(age.eq(&id_and_age_query))
                 .or_filter(address.like(&pattern))
                 .load::<Person>(conn)
-                .unwrap();
-        } else if id_and_age_query_flag == true && gender_query_flag == false {
-            return people
+                .unwrap()
+        } else if id_and_age_query_flag && !gender_query_flag {
+            people
                 .order(id.asc())
                 .filter(id.eq(&id_and_age_query))
                 .or_filter(name.like(&pattern))
                 .or_filter(age.eq(&id_and_age_query))
                 .or_filter(address.like(&pattern))
                 .load::<Person>(conn)
-                .unwrap();
-        } else if id_and_age_query_flag == false && gender_query_flag == true {
-            return people
+                .unwrap()
+        } else if !id_and_age_query_flag && gender_query_flag {
+            people
                 .order(id.asc())
                 .filter(name.like(&pattern))
                 .or_filter(gender.eq(&gender_query))
                 .or_filter(address.like(&pattern))
                 .load::<Person>(conn)
-                .unwrap();
+                .unwrap()
         } else {
-            return people
+            people
                 .order(id.asc())
                 .filter(name.like(&pattern))
                 .or_filter(address.like(&pattern))
                 .load::<Person>(conn)
-                .unwrap();
+                .unwrap()
         }
     }
 
