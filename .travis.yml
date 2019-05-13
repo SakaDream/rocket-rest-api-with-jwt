@@ -15,5 +15,6 @@ deploy:
         access_key_id: "$S3_ACCESS_KEY_ID"
         secret_access_key: "$S3_SECRET_ACCESS_KEY"
         bucket: "address-book-release"
+        acl: public_read
         local-dir: bin
         skip_cleanup: true
