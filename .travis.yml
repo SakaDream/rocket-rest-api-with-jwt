@@ -8,8 +8,12 @@ script:
         - printf "[global.databases]\npostgres_database = { url = \"postgres://postgres:postgres@db/postgres\" }" > Rocket.toml
         - mv src/secret.key.sample src/secret.key
         - cargo build --release
+        - mkdir bin
+        - cp target/release/address_book_rest_api bin
 deploy:
-        provider: releases
-        api_key: "$GITHUB_OAUTH_TOKEN"
-        file: "target/release/address_book_rest_api"
+        provider: s3
+        access_key_id: "$S3_ACCESS_KEY_ID"
+        secret_access_key: "$S3_SECRET_ACCESS_KEY"
+        bucket: "address-book-release"
+        local-dir: bin
         skip_cleanup: true
