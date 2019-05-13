@@ -13,5 +13,3 @@ deploy:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "/target/release/address_book_rest_api"
         skip_cleanup: true
-        on:
-                tags: true
