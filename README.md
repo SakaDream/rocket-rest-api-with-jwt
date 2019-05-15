@@ -20,7 +20,8 @@ Or using [Docker](https://www.docker.com/)
 - Rename `secret.key.sample` to `secret.key` or create your own key by running `head -c16 /dev/urandom > secret.key` in command line (Linux/UNIX only) and copy to `/src` folder
 - Create a database in postgres cli or [pgAdmin](https://www.pgadmin.org/) tool
 - Rename `Rocket.toml.sample` to `Rocket.toml` and update the database connection string in `url` key.
-- Build and run project: `cargo run`
+- Build with release profile: `cargo build --release`
+- Run release binary in command line/terminal. On Windows: `target/release/address_book_rest_api.exe`, on *UNIX: `target/release/address_book_rest_api`
 - Enjoy! 😄
 
 ### Docker
@@ -30,10 +31,7 @@ Or using [Docker](https://www.docker.com/)
 
 ## APIs
 
-### Address: 
-
-- Manual build: `localhost:8080`
-- Docker: `<Docker IP>:8000`
+### Address: `localhost:8000`
 
 ### `POST /api/auth/signup`: Signup
   - Request body:
