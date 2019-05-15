@@ -4,10 +4,16 @@ A Rusty Rocket 🚀 fuelled with Diesel 🛢 and secured by JWT 🔐
 
 ## Require
 
+You can build and run app from source:
+
 - [Rust](https://rustup.rs/)
 - [Postgres](https://www.postgresql.org/)
 
+Or using [Docker](https://www.docker.com/)
+
 ## How to run
+
+### Manual
 
 - Install Rust nightly-2019-04-26 (This build includes RLS and works perfectly with dependencies): `rustup install nightly-2019-04-26`
 - Set Rust Nightly to project: Go to the root of the project, open cmd/terminal and run `rustup override set nightly-2019-04-26`
@@ -15,6 +21,11 @@ A Rusty Rocket 🚀 fuelled with Diesel 🛢 and secured by JWT 🔐
 - Create a database in postgres cli or [pgAdmin](https://www.pgadmin.org/) tool
 - Rename `Rocket.toml.sample` to `Rocket.toml` and update the database connection string in `url` key.
 - Build and run project: `cargo run`
+- Enjoy! 😄
+
+### Docker
+
+- Enter into project directory and run `docker-compose up`
 - Enjoy! 😄
 
 ## APIs
