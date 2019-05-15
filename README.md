@@ -244,7 +244,7 @@ Or using [Docker](https://www.docker.com/)
 
 ### Errors:
   - Invalid or missing token
-    - Status code: 400 Bad Request
+    - Status code: 401 Unauthorized
     - Response:
     ```
     {

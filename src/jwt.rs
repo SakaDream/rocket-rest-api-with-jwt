@@ -46,7 +46,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for UserToken {
         Outcome::Failure((
             Status::BadRequest,
             status::Custom(
-                Status::BadRequest,
+                Status::Unauthorized,
                 Json(Response {
                     message: String::from(message_constants::MESSAGE_INVALID_TOKEN),
                     data: serde_json::to_value("").unwrap(),
