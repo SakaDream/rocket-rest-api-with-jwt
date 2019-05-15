@@ -30,7 +30,10 @@ Or using [Docker](https://www.docker.com/)
 
 ## APIs
 
-### Address: `localhost:8080`
+### Address: 
+
+- Manual build: `localhost:8080`
+- Docker: `<Docker IP>:8000`
 
 ### `POST /api/auth/signup`: Signup
   - Request body:
