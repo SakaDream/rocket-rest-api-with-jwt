@@ -1,5 +1,5 @@
 {
-    "rust-client.channel": "nightly-2019-04-26",
+    "rust-client.channel": "nightly",
     "rust-client.updateOnStartup": false,
     "rust.clippy_preference": "on"
 }
