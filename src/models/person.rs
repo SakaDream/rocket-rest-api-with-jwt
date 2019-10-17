@@ -31,11 +31,11 @@ impl Person {
     }
 
     pub fn find_by_id(i: i32, conn: &PgConnection) -> Option<Person> {
-        let p = people.find(i).get_result::<Person>(conn);
-        if p.is_err() {
-            None
+        let result_p = people.find(i).get_result::<Person>(conn);
+        if let Ok(p) = result_p {
+            Some(p)
         } else {
-            Some(p.unwrap())
+            None
         }
     }
 

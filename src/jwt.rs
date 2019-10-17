@@ -11,7 +11,7 @@ use rocket::request::{self, FromRequest, Request};
 use rocket::response::status;
 use rocket_contrib::json::Json;
 
-static KEY: &'static [u8; 16] = include_bytes!("secret.key");
+static KEY: &[u8; 16] = include_bytes!("secret.key");
 static ONE_WEEK: i64 = 60 * 60 * 24 * 7;
 
 #[derive(Debug, Serialize, Deserialize)]
