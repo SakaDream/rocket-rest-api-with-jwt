@@ -10,6 +10,7 @@ use rocket::outcome::Outcome;
 use rocket::request::{self, FromRequest, Request};
 use rocket::response::status;
 use rocket_contrib::json::Json;
+use time::PrimitiveDateTime;
 
 static KEY: &[u8; 16] = include_bytes!("secret.key");
 static ONE_WEEK: i64 = 60 * 60 * 24 * 7;
@@ -57,7 +58,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for UserToken {
 }
 
 pub fn generate_token(login: LoginInfoDTO) -> String {
-    let now = time::get_time().sec;
+    let now = PrimitiveDateTime::now().timestamp();
     let payload = UserToken {
         iat: now,
         exp: now + ONE_WEEK,
