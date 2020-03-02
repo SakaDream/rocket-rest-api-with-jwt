@@ -18,7 +18,6 @@ extern crate dotenv;
 extern crate jsonwebtoken;
 extern crate serde;
 extern crate serde_json;
-extern crate time;
 extern crate chrono;
 extern crate uuid;
 

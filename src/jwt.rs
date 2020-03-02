@@ -1,3 +1,4 @@
+use chrono::Utc;
 use config::DbConn;
 use constants::message_constants;
 use jsonwebtoken::errors::Result;
@@ -10,10 +11,9 @@ use rocket::outcome::Outcome;
 use rocket::request::{self, FromRequest, Request};
 use rocket::response::status;
 use rocket_contrib::json::Json;
-use time::PrimitiveDateTime;
 
 static KEY: &[u8; 16] = include_bytes!("secret.key");
-static ONE_WEEK: i64 = 60 * 60 * 24 * 7;
+static ONE_WEEK: i64 = 60 * 60 * 24 * 7; // in seconds
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserToken {
@@ -58,7 +58,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for UserToken {
 }
 
 pub fn generate_token(login: LoginInfoDTO) -> String {
-    let now = PrimitiveDateTime::now().timestamp();
+    let now = Utc::now().timestamp_nanos() / 1_000_000_000; // nanosecond -> second
     let payload = UserToken {
         iat: now,
         exp: now + ONE_WEEK,
