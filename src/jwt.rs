@@ -34,7 +34,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for UserToken {
         let conn = request.guard::<DbConn>().unwrap();
         if let Some(authen_header) = request.headers().get_one("Authorization") {
             let authen_str = authen_header.to_string();
-            if authen_str.starts_with("bearer") {
+            if authen_str.starts_with("Bearer") {
                 let token = authen_str[6..authen_str.len()].trim();
                 if let Ok(token_data) = decode_token(token.to_string()) {
                     if verify_token(&token_data, &conn) {

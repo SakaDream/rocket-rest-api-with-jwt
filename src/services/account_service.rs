@@ -31,7 +31,7 @@ pub fn login(login: LoginDTO, conn: DbConn) -> ResponseWithStatus {
             status_code: Status::Ok.code,
             response: Response {
                 message: String::from(message_constants::MESSAGE_LOGIN_SUCCESS),
-                data: serde_json::to_value(json!({ "token": jwt::generate_token(result), "type": "bearer" }))
+                data: serde_json::to_value(json!({ "token": jwt::generate_token(result), "type": "Bearer" }))
                     .unwrap(),
             },
         }
