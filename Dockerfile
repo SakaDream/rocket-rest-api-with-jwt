@@ -1,13 +1,11 @@
 # build stage
 FROM rustlang/rust:nightly-slim as build
 
-# install libpq
-RUN apt-get update
-RUN apt-get install -y libpq-dev
-RUN rm -rf /var/lib/apt/lists/*
-
-# create new empty binary project
-RUN USER=root cargo new --bin app
+# install libpq and create new empty binary project
+RUN apt-get update; \
+    apt-get install -y --no-install-recommends libpq-dev; \
+    rm -rf /var/lib/apt/lists/*; \
+    USER=root cargo new --bin app
 WORKDIR /app
 
 # copy manifests
@@ -15,34 +13,32 @@ COPY ./Cargo.toml ./Cargo.toml
 COPY ./Cargo.lock ./Cargo.lock
 
 # build this project to cache dependencies
-RUN cargo build --release
-RUN rm src/*.rs
+RUN cargo build --release; \
+    rm src/*.rs
 
 # copy project source and necessary files
 COPY ./src ./src
 COPY ./migrations ./migrations
 COPY ./diesel.toml .
 
-# add Rocket.toml and secret.key for Docker env
-RUN touch Rocket.toml
-RUN printf "[global.databases]\npostgres_database = { url = \"postgres://postgres:postgres@db/postgres\" }\n" > Rocket.toml
-RUN mv src/secret.key.sample src/secret.key
-
-# rebuild app with project source
-RUN rm ./target/release/deps/address_book_rest_api*
-RUN cargo build --release
+# add Rocket.toml and secret.key for Docker env and rebuild app with project source
+RUN touch Rocket.toml; \
+    printf "[global.databases]\npostgres_database = { url = \"postgres://postgres:postgres@db/postgres\" }\n" > Rocket.toml; \
+    mv src/secret.key.sample src/secret.key; \
+    rm ./target/release/deps/address_book_rest_api*; \
+    cargo build --release
 
 # deploy stage
-FROM debian:stretch-slim
+FROM debian:buster-slim
 
 # create app directory
 RUN mkdir app
 WORKDIR /app
 
 # install libpq
-RUN apt-get update
-RUN apt-get install -y libpq-dev
-RUN rm -rf /var/lib/apt/lists/*
+RUN apt-get update; \
+    apt-get install -y --no-install-recommends libpq-dev; \
+    rm -rf /var/lib/apt/lists/*
 
 # copy binary and configuration files
 COPY --from=build /app/target/release/address_book_rest_api .
