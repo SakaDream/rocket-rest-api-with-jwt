@@ -64,6 +64,7 @@ jobs:
           mkdir app
           cp target/release/address_book_rest_api app/address_book_rest_api
           cp diesel.toml app/diesel.toml
+          mv Rocket.toml.sample Rocket.toml
           cp Rocket.toml app/Rocket.toml
           cp docker/prod/Dockerfile app/Dockerfile
           cd app
