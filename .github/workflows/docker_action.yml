@@ -62,8 +62,9 @@ jobs:
       - name: Copy neccessary files and zip
         run: |
           mkdir app
-          cp target/release/actix-web-rest-api-with-jwt app/actix-web-rest-api-with-jwt
+          cp target/release/address_book_rest_api app/address_book_rest_api
           cp diesel.toml app/diesel.toml
+          cp Rocket.toml app/Rocket.toml
           cp docker/prod/Dockerfile app/Dockerfile
           cd app
           touch .env
