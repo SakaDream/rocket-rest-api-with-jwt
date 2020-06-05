@@ -1,5 +1,8 @@
 # Rocket REST API with JWT
 
+![CI](https://github.com/SakaDream/rocket-rest-api-with-jwt/workflows/CI/badge.svg)
+![Docker CICD](https://github.com/SakaDream/rocket-rest-api-with-jwt/workflows/Docker%20CICD/badge.svg)
+
 A Rusty Rocket 🚀 fuelled with Diesel 🛢 and secured by JWT 🔐
 
 ## Require
