@@ -11,7 +11,7 @@ RUN apt-get update; \
     rm -rf /var/lib/apt/lists/*
 
 # copy binary and configuration files
-COPY ./target/release/address_book_rest_api .
+COPY ./address_book_rest_api .
 COPY ./Rocket.toml .
 COPY ./diesel.toml .
 COPY ./.env .
