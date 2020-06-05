@@ -153,7 +153,7 @@ jobs:
           command: build
           args: --release
         env:
-          RUSTFLAGS: -L D:\a\actix-web-rest-api-with-jwt\actix-web-rest-api-with-jwt\libs
+          RUSTFLAGS: -L D:\a\rocket-rest-api-with-jwt\rocket-rest-api-with-jwt\libs
 
   cicd-macos:
     name: CI macOS
