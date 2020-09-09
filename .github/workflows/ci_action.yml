@@ -131,7 +131,7 @@ jobs:
           command: check
           args: --release
         env:
-          RUSTFLAGS: -L D:\a\rocket-rest-api-with-jwt\rocket-rest-api-with-jwt\libs
+          RUSTFLAGS: -L D:\a\rocket-rest-api-with-jwt\rocket-rest-api-with-jwt\libs\windows
 
       - name: Run cargo fmt
         uses: actions-rs/cargo@v1
@@ -153,7 +153,7 @@ jobs:
           command: build
           args: --release
         env:
-          RUSTFLAGS: -L D:\a\rocket-rest-api-with-jwt\rocket-rest-api-with-jwt\libs
+          RUSTFLAGS: -L D:\a\rocket-rest-api-with-jwt\rocket-rest-api-with-jwt\libs\windows
 
   cicd-macos:
     name: CI macOS

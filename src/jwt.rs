@@ -4,6 +4,7 @@ use constants::message_constants;
 use jsonwebtoken::errors::Result;
 use jsonwebtoken::TokenData;
 use jsonwebtoken::{Header, Validation};
+use jsonwebtoken::{EncodingKey, DecodingKey};
 use models::response::Response;
 use models::user::{ User, LoginInfoDTO };
 use rocket::http::Status;
@@ -12,7 +13,6 @@ use rocket::request::{self, FromRequest, Request};
 use rocket::response::status;
 use rocket_contrib::json::Json;
 
-static KEY: &[u8; 16] = include_bytes!("secret.key");
 static ONE_WEEK: i64 = 60 * 60 * 24 * 7; // in seconds
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -66,11 +66,11 @@ pub fn generate_token(login: LoginInfoDTO) -> String {
         login_session: login.login_session,
     };
 
-    jsonwebtoken::encode(&Header::default(), &payload, KEY).unwrap()
+    jsonwebtoken::encode(&Header::default(), &payload, &EncodingKey::from_secret(include_bytes!("secret.key"))).unwrap()
 }
 
 fn decode_token(token: String) -> Result<TokenData<UserToken>> {
-    jsonwebtoken::decode::<UserToken>(&token, KEY, &Validation::default())
+    jsonwebtoken::decode::<UserToken>(&token, &DecodingKey::from_secret(include_bytes!("secret.key")), &Validation::default())
 }
 
 fn verify_token(token_data: &TokenData<UserToken>, conn: &DbConn) -> bool {
