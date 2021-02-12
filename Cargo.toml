@@ -4,18 +4,18 @@ version = "0.1.0"
 authors = ["Hai Phan <bahaimt@gmail.com>"]
 
 [dependencies]
-rocket = "0.4.6"
+rocket = "0.4.7"
 diesel_migrations = "1.4.0"
-serde = "1.0.118"
-serde_derive = "1.0.118"
-serde_json = "1.0.61"
-log = "0.4.11"
+serde = "1.0.123"
+serde_derive = "1.0.123"
+serde_json = "1.0.62"
+log = "0.4.14"
 jsonwebtoken = "7.2.0"
 bcrypt = "0.9.0"
 dotenv = "0.15.0"
 
 [dependencies.rocket_contrib]
-version = "0.4.6"
+version = "0.4.7"
 default-features = false
 features = ["diesel_postgres_pool", "json"]
 
@@ -28,5 +28,5 @@ version = "0.4.19"
 features = ["serde"]
 
 [dependencies.uuid]
-version = "0.8.1"
+version = "0.8.2"
 features = ["v4"]
